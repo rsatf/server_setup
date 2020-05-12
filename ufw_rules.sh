@@ -3,7 +3,7 @@
 # This is what the below firewall rules will look like if run in "extended" mode (-f)
 # to                                  action              from
 # --                                  ------              ----
-# 429765/tcp (OpenSSH)                allow in            anywhere
+# 42976/tcp (OpenSSH)                allow in            anywhere
 # 80,443/tcp (Nginx Full)             allow in            anywhere
 # 127.0.0.1 587 (Postfix Submission)  allow in            127.0.0.1
 # 4380/udp (Valve)                    allow in            anywhere
@@ -79,11 +79,11 @@ extended_rules() {
     
     # Allow Postfix
     _debug "${FUNCNAME[0]}" "Enabling Skibas random Postfix Submission port requirement xD"
-    sudo ufw allow 587 from 127.0.0.1 comment "Postfix Submission"
+    sudo ufw allow from 127.0.0.1 to any port 587 comment "Postfix Submission"
 }
 
 main () {
-    ssh_port=429765
+    ssh_port=42976
     exec_simple=""
     exec_extended=""
     _getopts "${@}"
@@ -98,24 +98,28 @@ main () {
         exec_extended="0"
     fi
 
+    printf "Simple: %s\n" "${exec_simple}"
+    printf "Extended: %s\n" "${exec_extended}"
+
     _debug "${FUNCNAME[0]}" "Ensuring efw is disabled"
     sudo ufw disable
 
-    if [[ "${exec_simple}" -eq 0 ]]; then
+    if [[ -n "${exec_simple}" ]] && [[ "${exec_simple}" -eq 0 ]]; then
         _debug "${FUNCNAME[0]}" "Applying simple ufw rules"
         simple_rules
     fi
 
-    if [[ "${exec_extended}" -eq 0 ]]; then
+    if [[ -n "${exec_extended}" ]] && [[ "${exec_extended}" -eq 0 ]]; then
         _debug "${FUNCNAME[0]}" "Applying extended ufw rules"
+        simple_rules
         extended_rules
     fi
 
-    _debug "${FUNCNAME[0]}" "Checking current ufw rules"
-    sudo ufw status verbose
-
     _debug "${FUNCNAME[0]}" "Enabling ufw to apply new rules, remember to connect to SSH on ${ssh_port} if not already"
     sudo ufw enable
+
+    _debug "${FUNCNAME[0]}" "Checking current ufw rules"
+    sudo ufw status verbose
 }
 
 main "${@}"
