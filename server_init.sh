@@ -86,6 +86,9 @@ main() {
     expire_accounts+=( ubuntu root )
     ssh_port=42976
     is_aws=""
+
+    _debug "${FUNCNAME[0]}" "Installing apt packages"
+    sudo apt install -y unzip
     
     _debug "${FUNCNAME[0]}" "Changing server hostname to ${new_hostname}"
     change_hostname
