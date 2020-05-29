@@ -1,0 +1,14 @@
+[Unit]
+Description=logs.tf notifier for serveme.tf
+
+[Service]
+User=russ
+Group=russ
+Type=simple
+Restart=always
+RestartSec=60
+ExecStart=/bin/bash -c 'exec /home/russ/rsa.tf/logstf_notify/logstf_notify.sh -u 76561197960497430 -m ":red_circle: Live local 6v6"'
+ExecStop=/bin/kill -TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target
