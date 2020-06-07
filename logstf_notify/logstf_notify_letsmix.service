@@ -1,0 +1,18 @@
+[Unit]
+Description=logs.tf notifier for letsmix
+
+[Service]
+User=russ
+Group=russ
+Type=simple
+Restart=always
+RestartSec=60
+ExecStart=/bin/bash -c 'exec /home/russ/rsa.tf/logstf_notify/logstf_notify.sh \
+    -u "76561198140362843" \
+    -m ":red_circle: Live local 6v6" \
+    -n "Miss Pauling" \
+    -w "https://discordapp.com/api/webhooks/715676669318266962/Gam855vZdKpwqbrxj7pV7Khh1j-Md-UkHy09bkBmXVYgr-pH7zSpYPyCrPuiePpzHCFB"'
+ExecStop=/bin/kill -TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target
