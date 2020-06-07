@@ -1,0 +1,10 @@
+[Unit]
+Description=Team Fortress 2 server
+RefuseManualStart=no
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/steam/tf2/server/tf2_launch.sh
+
+[Install]
+WantedBy=multi-user.target
