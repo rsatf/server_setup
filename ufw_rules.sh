@@ -3,12 +3,16 @@
 # This is what the below firewall rules will look like if run in "extended" mode (-f)
 # to                                  action              from
 # --                                  ------              ----
-# 42976/tcp (OpenSSH)                allow in            anywhere
+# 42976/tcp (OpenSSH)                 allow in            anywhere
 # 80,443/tcp (Nginx Full)             allow in            anywhere
 # 127.0.0.1 587 (Postfix Submission)  allow in            127.0.0.1
 # 4380/udp (Valve)                    allow in            anywhere
 # 27000:27100 udp (Valve)             allow in            anywhere
 # 27000:27100 tcp (Valve)             allow in            anywhere
+# 30000:30020 tcp (Valve)             allow in            anywhere
+# 40000:40020 tcp (Valve)             allow in            anywhere
+# 51840/udp (Valve undocumented port) allow out           anywhere
+
 
 # Exit on command fail
 set -e
@@ -70,6 +74,16 @@ simple_rules() {
     sudo ufw allow 27000:27100/tcp comment "Valve"
     _debug "${FUNCNAME[0]}" "Enabling UDP port range 27000:27100 for Valve"
     sudo ufw allow 27000:27100/udp comment "Valve"
+    _debug "${FUNCNAME[0]}" "Enabling TCP port range 30000:30020 for Valve"
+    sudo ufw allow 30000:30020/tcp comment "Valve Steam Port"
+    _debug "${FUNCNAME[0]}" "Enabling UDP port range 30000:30020 for Valve"
+    sudo ufw allow 30000:30020/udp comment "Valve Steam Port"
+    _debug "${FUNCNAME[0]}" "Enabling TCP port range 40000:40020 for Valve"
+    sudo ufw allow 40000:40020/tcp comment "Valve Client Port"
+    _debug "${FUNCNAME[0]}" "Enabling UDP port range 40000:40020 for Valve"
+    sudo ufw allow 40000:40020/udp comment "Valve Client Port"
+    _debug "${FUNCNAME[0]}" "Enabling UDP port 52840 for Valve"
+    sudo ufw allow out 51840/udp comment "Valve undocumented port"
 }
 
 extended_rules() {
