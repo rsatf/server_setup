@@ -1,6 +1,6 @@
 @ShutdownOnFailedCommand 1
 @NoPromptForPassword 1
 login anonymous
-force_install_dir /home/steam/tf2/server/tf/
+force_install_dir /home/steam/tf2/server/
 app_update 232250
 quit
